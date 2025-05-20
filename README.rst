@@ -48,9 +48,16 @@ Usage
   will render as
   `Get Image Dimensions <https://vtk.org/doc/nightly/html/classvtkImageData.html#a3cbcab15f8744efeb5300e21dcfbe9af>`_
 
-.. note::
+Notes
+-----
 
-    The role currently does not support linking to nested members. For example,
-    linking to an enum member with ``:vtk:`vtkCommand.EventIds``` works,
-    but linking to a specific enum value with ``:vtk:`vtkCommand.EventIds.PickEvent```
-    does not.
+- The URLs linking to the VTK documentation are checked to ensure they are valid
+  references. A warning is emitted if the reference is invalid, but the role
+  will still try to point to a valid URL where possible. It is recommended to
+  set ``nitpicky=True`` in ``conf.py`` when using this extension to ensure all
+  links are valid and correct.
+
+- The role does not currently support linking to nested members. For example,
+  linking to an enum member with ``:vtk:`vtkCommand.EventIds``` works,
+  but linking to a specific enum value with ``:vtk:`vtkCommand.EventIds.PickEvent```
+  does not.
