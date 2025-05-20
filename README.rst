@@ -8,14 +8,14 @@ using the ``:vtk:`` reference role.
 Installation
 ------------
 
-#.  Add ``vtk-ref`` as a project dependency or install it with:
+#.  Add ``vtk-xref`` as a project dependency or install it with:
 
     .. code-block:: bash
 
-        pip install vtk-ref
+        pip install vtk-xref
 
 
-#.  Add ``vtk_ref`` as an extension in your ``conf.py`` file
+#.  Add ``vtk_xref`` as an extension in your ``conf.py`` file
     used by Sphinx:
 
 .. code-block:: python
