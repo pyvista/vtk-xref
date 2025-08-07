@@ -149,3 +149,7 @@ def _find_member_anchor(html: str, member_name: str) -> str | None:
 
 def setup(app):
     app.add_role('vtk', VTKRole())
+    return {
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }
