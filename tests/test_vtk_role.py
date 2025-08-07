@@ -7,6 +7,7 @@ import re
 import subprocess
 import sys
 import textwrap
+import filecmp
 
 from bs4 import BeautifulSoup
 import pytest
@@ -190,3 +191,44 @@ def test_vtk_role(tmp_path, code_block, expected_links, expected_warning):
         assert link.text == expected_text, (
             f'Expected link text "{expected_text}", got "{link.text}"'
         )
+
+
+def _build_docs(src, build_dir, jobs):
+    cmd = [
+        sys.executable,
+        "-msphinx",
+        "-b",
+        "html",
+        str(src),
+        str(build_dir / "html"),
+        "-d",
+        str(build_dir / "doctrees"),
+        f"-j{jobs}",
+        "-W",
+        "--keep-going",
+    ]
+    return subprocess.run(cmd, capture_output=True, text=True)
+
+
+def test_vtk_role_parallel_safe(tmp_path):
+    doc_src = make_temp_doc_project(tmp_path, ":vtk:`vtkImageData.GetDimensions`")
+
+    build_parallel = tmp_path / "build_parallel"
+    build_serial = tmp_path / "build_serial"
+
+    # Parallel build
+    res_parallel = _build_docs(doc_src, build_parallel, "auto")
+    assert res_parallel.returncode == 0, (
+        f"Parallel build failed:\n{res_parallel.stderr}"
+    )
+
+    # Serial build
+    res_serial = _build_docs(doc_src, build_serial, 1)
+    assert res_serial.returncode == 0, f"Serial build failed:\n{res_serial.stderr}"
+
+    # Compare HTML output
+    html_parallel = build_parallel / "html" / "index.html"
+    html_serial = build_serial / "html" / "index.html"
+    assert filecmp.cmp(html_parallel, html_serial, shallow=False), (
+        "Parallel and serial outputs differ"
+    )
