@@ -1,7 +1,8 @@
 """Sphinx role for linking to VTK documentation."""
 
 from __future__ import annotations
-
+from subprocess import run, PIPE
+from pathlib import Path
 from http import HTTPStatus
 import re
 import subprocess
@@ -207,28 +208,66 @@ def _build_docs(src, build_dir, jobs):
         "-W",
         "--keep-going",
     ]
-    return subprocess.run(cmd, capture_output=True, text=True)
+    return run(cmd, stdout=PIPE, stderr=PIPE, text=True)
 
 
-def test_vtk_role_parallel_safe(tmp_path):
-    doc_src = make_temp_doc_project(tmp_path, ":vtk:`vtkImageData.GetDimensions`")
+def _check_html_content(html_path, expected_links):
+    """Check if the expected links are in the generated HTML."""
+    with open(html_path, "r", encoding="utf-8") as f:
+        soup = BeautifulSoup(f, "html.parser")
+
+    for expected_link in expected_links:
+        link = soup.find("a", href=expected_link["href"])
+        assert link is not None, f"Expected link not found: {expected_link['href']}"
+        assert link.text.strip() == expected_link["text"], (
+            f'Expected link text "{expected_link["text"]}", but got "{link.text.strip()}"'
+        )
+
+
+def test_build(tmp_path):
+    tinypages_dir = Path(__file__).parent / "tinypages"
 
     build_parallel = tmp_path / "build_parallel"
     build_serial = tmp_path / "build_serial"
 
-    # Parallel build
-    res_parallel = _build_docs(doc_src, build_parallel, "auto")
+    res_parallel = _build_docs(tinypages_dir, build_parallel, "auto")
     assert res_parallel.returncode == 0, (
         f"Parallel build failed:\n{res_parallel.stderr}"
     )
 
-    # Serial build
-    res_serial = _build_docs(doc_src, build_serial, 1)
+    res_serial = _build_docs(tinypages_dir, build_serial, 1)
     assert res_serial.returncode == 0, f"Serial build failed:\n{res_serial.stderr}"
 
-    # Compare HTML output
     html_parallel = build_parallel / "html" / "index.html"
     html_serial = build_serial / "html" / "index.html"
+
+    assert filecmp.cmp(html_parallel, html_serial, shallow=False), (
+        "Parallel and serial outputs differ"
+    )
+
+    # Verify that both parallel and serial outputs are the same
+    html_parallel = build_parallel / "html" / "index.html"
+    html_serial = build_serial / "html" / "index.html"
+
+    # Check for expected content in the output HTML
+    expected_links = [
+        {
+            "href": "https://vtk.org/doc/nightly/html/classvtkUnstructuredGrid.html#a390dfe6352f0bba3bb17be5d7a5e83e7",
+            "text": "vtkUnstructuredGrid.GetCells",
+        },
+        {
+            "href": "https://vtk.org/doc/nightly/html/classvtkPolyData.html#a34a0f2c07e4464a32cfb30e946a78be2",
+            "text": "SetVerts",
+        },
+        {
+            "href": "https://vtk.org/doc/nightly/html/classvtkPolyData.html#a00a291f8dc80f58fb451d3227ab3fb65",
+            "text": "Get Triangle Strips",
+        },
+    ]
+
+    _check_html_content(html_parallel, expected_links)
+    _check_html_content(html_serial, expected_links)
+
     assert filecmp.cmp(html_parallel, html_serial, shallow=False), (
         "Parallel and serial outputs differ"
     )
