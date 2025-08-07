@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+    - main
   workflow_dispatch:
 
 concurrency:
@@ -19,22 +19,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.13"]
+        python-version: ['3.13']
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: pip
 
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install . --group dev
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install . --group dev
 
-      - name: Run tests
-        run: pytest -v
+    - name: Run tests
+      run: pytest -v
+

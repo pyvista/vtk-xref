@@ -4,3 +4,4 @@ vtk_xref.egg-info/
 __pycache__/
 #*.
 tests/tinypages/_build
+.coverage
