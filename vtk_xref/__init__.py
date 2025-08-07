@@ -25,23 +25,23 @@ class VTKRole(ReferenceRole):
 
     def run(self):  # numpydoc ignore=RT01
         """Run the :vtk: role."""
-        INVALID_URL = ''  # URL is set to empty string if not valid
+        INVALID_URL = ""  # URL is set to empty string if not valid
 
         cls_full = self.target
         title = self.title
 
         # Handle `~` prefix to shorten the title
-        if cls_full.startswith('~'):
+        if cls_full.startswith("~"):
             cls_full = cls_full[1:]
             if not self.has_explicit_title:
-                title = cls_full.split('.')[-1]
+                title = cls_full.split(".")[-1]
 
         # Validate and split input like 'vtkClass.member'
-        parts = cls_full.split('.')
+        parts = cls_full.split(".")
         if len(parts) > 2:
             cls_name = parts[0]
             member_name = parts[1]
-            extra = '.'.join(parts[2:])
+            extra = ".".join(parts[2:])
             self._warn_nested_members_ref(cls_name, member_name, extra)
         else:
             cls_name, member_name = parts[0], parts[1] if len(parts) == 2 else None
@@ -73,7 +73,7 @@ class VTKRole(ReferenceRole):
         try:
             response = requests.get(cls_url, timeout=3)
             if response.status_code != HTTPStatus.OK:
-                msg = f'Status code {response.status_code}'
+                msg = f"Status code {response.status_code}"
                 raise requests.RequestException(msg)
             html = response.text
         except requests.RequestException:
@@ -92,7 +92,7 @@ class VTKRole(ReferenceRole):
         if member_name:
             anchor = _find_member_anchor(html, member_name)
             if anchor:
-                full_url = f'{cls_url}#{anchor}'
+                full_url = f"{cls_url}#{anchor}"
                 self.resolved_urls[cache_key] = full_url
                 node = nodes.reference(title, title, refuri=full_url)
                 return [node], []
@@ -117,7 +117,7 @@ class VTKRole(ReferenceRole):
     def _warn_invalid_class_member_ref(self, cls_name, member_name):
         self._issue_warning(
             f"VTK method anchor not found for: '{cls_name}.{member_name}' → {_vtk_class_url(cls_name)}#<anchor>, "
-            f'the class URL is used instead.'
+            f"the class URL is used instead."
         )
 
     def _warn_nested_members_ref(self, cls_name, member_name, extra):
@@ -127,29 +127,29 @@ class VTKRole(ReferenceRole):
         )
 
     def _issue_warning(self, msg):
-        self.inliner.reporter.warning(msg, line=self.lineno, subtype='ref')
+        self.inliner.reporter.warning(msg, line=self.lineno, subtype="ref")
 
 
 def _vtk_class_url(cls_name):
     """Return the URL to the documentation for a VTK class."""
-    return f'https://vtk.org/doc/nightly/html/class{cls_name}.html'
+    return f"https://vtk.org/doc/nightly/html/class{cls_name}.html"
 
 
 def _find_member_anchor(html: str, member_name: str) -> str | None:
     """Try to find the anchor ID for a method/attribute in the HTML."""
-    soup = BeautifulSoup(html, 'html.parser')
-    headers = soup.find_all(['h2', 'h3'], class_='memtitle')
+    soup = BeautifulSoup(html, "html.parser")
+    headers = soup.find_all(["h2", "h3"], class_="memtitle")
     for header in headers:
         if member_name in header.get_text():
-            anchor = header.find_previous('a', id=True)
+            anchor = header.find_previous("a", id=True)
             if anchor:
-                return anchor['id']
+                return anchor["id"]
     return None
 
 
 def setup(app):
-    app.add_role('vtk', VTKRole())
+    app.add_role("vtk", VTKRole())
     return {
-        'parallel_read_safe': True,
-        'parallel_write_safe': True,
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
     }

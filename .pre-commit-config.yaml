@@ -1,0 +1,34 @@
+# Integration with GitHub Actions
+# See https://pre-commit.ci/
+ci:
+  autoupdate_commit_msg: "chore: update pre-commit hooks"
+  autofix_prs: true
+  autoupdate_schedule: quarterly
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.2
+    hooks:
+      - id: check-github-workflows
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.7
+    hooks:
+      - id: ruff
+        args: [--fix, --show-fixes]
+        exclude: tests/core/typing
+      - id: ruff-format
+        exclude: tests/core/typing
+
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.11.0
+    hooks:
+      - id: zizmor
