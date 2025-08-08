@@ -3,7 +3,7 @@ build-backend = 'setuptools.build_meta'
 requires = ['setuptools>=61']
 
 [dependency-groups]
-dev = ['pytest', 'pytest-cov']
+dev = ['pytest', 'pytest-cov', 'pre-commit']
 
 [project]
 authors = [{name = 'PyVista Developers', email = 'info@pyvista.org'}]
