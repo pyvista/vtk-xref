@@ -4,7 +4,7 @@ def example() -> int:
 
     Demonstrate the usage of ``vtk-xref``:
 
-    - :vtk:`vtkImageData.GetDimensions` should render to ``vtkImageData.GetDimensions``.
+    - :vtk:`vtkImageData.GetSpacing` should render to ``vtkImageData.GetSpacing``.
     - :vtk:`~vtkPolyData.SetVerts` should render to ``SetVerts``.
     - :vtk:`Get Triangle Strips <vtkPolyData.GetStrips>` should render to ``Get Triangle Strips``.
 

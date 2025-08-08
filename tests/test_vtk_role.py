@@ -17,10 +17,10 @@ import requests
 from vtk_xref import _find_member_anchor
 from vtk_xref import _vtk_class_url
 
-GET_DIMENSIONS_ANCHOR = "a3cbcab15f8744efeb5300e21dcfbe9af"
-GET_DIMENSIONS_URL = f"{_vtk_class_url('vtkImageData')}#{GET_DIMENSIONS_ANCHOR}"
-SET_EXTENT_ANCHOR = "a6e4c45a06e756c2d9d72f2312e773cb9"
-SET_EXTENT_URL = f"{_vtk_class_url('vtkImageData')}#{SET_EXTENT_ANCHOR}"
+GET_SPACING_ANCHOR = "ae6ebee83577b2d58c393a0df2f15b67d"
+GET_SPACING_URL = f"{_vtk_class_url('vtkImageData')}#{GET_SPACING_ANCHOR}"
+SET_ORIGIN_ANCHOR = "ad18d146c5e2471876e5d9c6242ac1544"
+SET_ORIGIN_URL = f"{_vtk_class_url('vtkImageData')}#{SET_ORIGIN_ANCHOR}"
 
 EVENT_IDS_ANCHOR = "a59a8690330ebcb1af6b66b0f3121f8fe"
 EVENT_IDS_URL = f"{_vtk_class_url('vtkCommand')}#{EVENT_IDS_ANCHOR}"
@@ -78,33 +78,33 @@ def make_temp_doc_project(tmp_path, sample_text: str):
     [
         (  # Valid cases (get/set methods and enum)
             textwrap.dedent("""
-            :vtk:`vtkImageData.GetDimensions`.
-            :vtk:`vtkImageData.SetExtent`
+            :vtk:`vtkImageData.GetSpacing`.
+            :vtk:`vtkImageData.SetOrigin`
             :vtk:`vtkCommand.EventIds`
             """),
             {
-                GET_DIMENSIONS_URL: "vtkImageData.GetDimensions",
-                SET_EXTENT_URL: "vtkImageData.SetExtent",
+                GET_SPACING_URL: "vtkImageData.GetSpacing",
+                SET_ORIGIN_URL: "vtkImageData.SetOrigin",
                 EVENT_IDS_URL: "vtkCommand.EventIds",
             },
             None,
         ),
         (  # Use an explicit title
-            ":vtk:`Get Image Dimensions<vtkImageData.GetDimensions>`",
-            {GET_DIMENSIONS_URL: "Get Image Dimensions"},
+            ":vtk:`Get Image Spacing<vtkImageData.GetSpacing>`",
+            {GET_SPACING_URL: "Get Image Spacing"},
             None,
         ),
         (  # Use a tilde
-            ":vtk:`~vtkImageData.GetDimensions`",
-            {GET_DIMENSIONS_URL: "GetDimensions"},
+            ":vtk:`~vtkImageData.GetSpacing`",
+            {GET_SPACING_URL: "GetSpacing"},
             None,
         ),
         (  # Valid class but too many member parts
-            ":vtk:`vtkImageData.GetDimensions.SomethingElse`",
+            ":vtk:`vtkImageData.GetSpacing.SomethingElse`",
             {
-                GET_DIMENSIONS_URL: "vtkImageData.GetDimensions.SomethingElse",
+                GET_SPACING_URL: "vtkImageData.GetSpacing.SomethingElse",
             },
-            "Too many nested members in VTK reference: 'vtkImageData.GetDimensions.SomethingElse'. Interpreting as 'vtkImageData.GetDimensions', ignoring: 'SomethingElse'",
+            "Too many nested members in VTK reference: 'vtkImageData.GetSpacing.SomethingElse'. Interpreting as 'vtkImageData.GetSpacing', ignoring: 'SomethingElse'",
         ),
         (  # Valid class, invalid method
             ":vtk:`vtkImageData.FakeMethod`",
@@ -231,9 +231,7 @@ def test_build(tmp_path):
     build_serial = tmp_path / "build_serial"
 
     res_parallel = _build_docs(tinypages_dir, build_parallel, "auto")
-    assert res_parallel.returncode == 0, (
-        f"Parallel build failed:\n{res_parallel.stderr}"
-    )
+    assert res_parallel.returncode == 0, f"Parallel build failed:\n{res_parallel.stderr}"
 
     res_serial = _build_docs(tinypages_dir, build_serial, 1)
     assert res_serial.returncode == 0, f"Serial build failed:\n{res_serial.stderr}"
