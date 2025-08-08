@@ -34,19 +34,19 @@ Usage
   `vtkImageData <https://vtk.org/doc/nightly/html/classvtkImageData.html>`_.
 
 - Link directly to class members such as methods or enums. For example,
-  write ``:vtk:`vtkImageData.GetDimensions``` to link directly to the
-  ``GetDimensions`` method. This will render as
-  `vtkImageData.GetDimensions <https://vtk.org/doc/nightly/html/classvtkImageData.html#a3cbcab15f8744efeb5300e21dcfbe9af>`_.
+  write ``:vtk:`vtkImageData.GetSpacing``` to link directly to the
+  ``GetSpacing`` method. This will render as
+  `vtkImageData.GetSpacing <https://vtk.org/doc/nightly/html/classvtkImageData.html#ae6ebee83577b2d58c393a0df2f15b67d>`_.
 
 - Use ``~`` to shorten the title for the link and only show the class member
-  after the period. For example, ``:vtk:`~vtkImageData.GetDimensions```
+  after the period. For example, ``:vtk:`~vtkImageData.GetSpacing```
   will render as
-  `GetDimensions <https://vtk.org/doc/nightly/html/classvtkImageData.html#a3cbcab15f8744efeb5300e21dcfbe9af>`_.
+  `GetSpacing <https://vtk.org/doc/nightly/html/classvtkImageData.html#ae6ebee83577b2d58c393a0df2f15b67d>`_.
 
 - Provide a custom title for the reference. For example,
-  ``:vtk:`Get Image Dimensions <vtkImageData.GetDimensions>```
+  ``:vtk:`Get Image Spacing <vtkImageData.GetSpacing>```
   will render as
-  `Get Image Dimensions <https://vtk.org/doc/nightly/html/classvtkImageData.html#a3cbcab15f8744efeb5300e21dcfbe9af>`_
+  `Get Image Spacing <https://vtk.org/doc/nightly/html/classvtkImageData.html#ae6ebee83577b2d58c393a0df2f15b67d>`_
 
 Notes
 -----
