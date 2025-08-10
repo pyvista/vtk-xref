@@ -9,6 +9,9 @@ from bs4 import BeautifulSoup
 from docutils import nodes
 import requests
 from sphinx.util.docutils import ReferenceRole
+from sphinx.util import logging
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from typing import ClassVar
@@ -127,7 +130,9 @@ class VTKRole(ReferenceRole):
         )
 
     def _issue_warning(self, msg):
-        self.inliner.reporter.warning(msg, line=self.lineno, subtype="ref")
+        logger.warning(
+            msg, location=(self.inliner.document.current_source, self.lineno), type="vtk-xref"
+        )
 
 
 def _vtk_class_url(cls_name):

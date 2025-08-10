@@ -104,17 +104,17 @@ def make_temp_doc_project(tmp_path, sample_text: str):
             {
                 GET_SPACING_URL: "vtkImageData.GetSpacing.SomethingElse",
             },
-            "Too many nested members in VTK reference: 'vtkImageData.GetSpacing.SomethingElse'. Interpreting as 'vtkImageData.GetSpacing', ignoring: 'SomethingElse'",
+            "Too many nested members in VTK reference: 'vtkImageData.GetSpacing.SomethingElse'. Interpreting as 'vtkImageData.GetSpacing', ignoring: 'SomethingElse' [vtk-xref]",
         ),
         (  # Valid class, invalid method
             ":vtk:`vtkImageData.FakeMethod`",
             {_vtk_class_url("vtkImageData"): "vtkImageData.FakeMethod"},
-            "VTK method anchor not found for: 'vtkImageData.FakeMethod' → https://vtk.org/doc/nightly/html/classvtkImageData.html#<anchor>, the class URL is used instead.",
+            "VTK method anchor not found for: 'vtkImageData.FakeMethod' → https://vtk.org/doc/nightly/html/classvtkImageData.html#<anchor>, the class URL is used instead. [vtk-xref]",
         ),
         (  # Invalid class
             ":vtk:`NonExistentClass`",
             {_vtk_class_url("NonExistentClass"): "NonExistentClass"},
-            "Invalid VTK class reference: 'NonExistentClass' → https://vtk.org/doc/nightly/html/classNonExistentClass.html",
+            "Invalid VTK class reference: 'NonExistentClass' → https://vtk.org/doc/nightly/html/classNonExistentClass.html [vtk-xref]",
         ),
         (  # Test caching with valid class and invalid member
             textwrap.dedent("""
@@ -127,7 +127,7 @@ def make_temp_doc_project(tmp_path, sample_text: str):
                 # Only one URL expected: the url for a bad member falls back to the class URL
                 _vtk_class_url("vtkImageData"): "vtkImageData",
             },
-            "VTK method anchor not found for: 'vtkImageData.FakeEnum' → https://vtk.org/doc/nightly/html/classvtkImageData.html#<anchor>, the class URL is used instead.",
+            "VTK method anchor not found for: 'vtkImageData.FakeEnum' → https://vtk.org/doc/nightly/html/classvtkImageData.html#<anchor>, the class URL is used instead. [vtk-xref]",
         ),
         (  # Test caching with invalid class and invalid member
             textwrap.dedent("""
@@ -139,7 +139,7 @@ def make_temp_doc_project(tmp_path, sample_text: str):
             {
                 _vtk_class_url("vtkFooBar"): "vtkFooBar",
             },
-            "Invalid VTK class reference: 'vtkFooBar' → https://vtk.org/doc/nightly/html/classvtkFooBar.html",
+            "Invalid VTK class reference: 'vtkFooBar' → https://vtk.org/doc/nightly/html/classvtkFooBar.html [vtk-xref]",
         ),
     ],
 )
