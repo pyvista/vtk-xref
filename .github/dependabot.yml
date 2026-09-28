@@ -1,0 +1,23 @@
+version: 2
+multi-ecosystem-groups:
+  maintenance:
+    schedule:
+      interval: quarterly
+    labels: [maintenance, dependencies]
+updates:
+- package-ecosystem: pip
+  directory: /
+  schedule:
+    interval: weekly
+  labels: [maintenance, dependencies]
+  allow:
+  - dependency-name: sphinx
+  - dependency-name: beautifulsoup4
+  - dependency-name: requests
+  groups:
+    project:
+      patterns: ['*']
+- package-ecosystem: github-actions
+  directory: /
+  patterns: ['*']
+  multi-ecosystem-group: maintenance
